@@ -1,7 +1,10 @@
 module control (	input Clk, Reset, Run, 
-						output logic Run_O);
+						output logic shift,
+						output logic add,
+						output logic sub
+						);
 						
-		enum logic [2:0] {A, B, C} curr_state, next_state; // States
+		enum logic [3:0] {A, B, C, D, E, F, G, H, I, J} curr_state, next_state; // States
 		// Assign 'next_state' based on 'state' and 'Execute'
 		always_ff @ (posedge Clk or posedge Reset ) 
 		begin
