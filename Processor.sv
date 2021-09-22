@@ -6,13 +6,12 @@
 //Always use input/output logic types when possible, prevents issues with tools that have strict type enforcement
 
 module Processor (input logic   Clk,     // Internal
-                                Reset,   // Push button 0
-                                LoadA,   // Push button 1
-                                LoadB,   // Push button 2
-                                Execute, // Push button 3
-                  input  logic [7:0]  Din,     // input data
+                                clearALoadB,  
+                                Execute,
+						input logic	[7:0]  Switches,
+                  input logic [7:0]  Din,     // input data
 				  //Hint for SignalTap, you want to comment out the following 2 lines to hardwire values for F and R
-                  output logic [3:0]  LED,     // DEBUG
+//                  output logic [3:0]  LED,     // DEBUG
                   output logic [7:0]  Aval,    // DEBUG
                                 Bval,    // DEBUG
                   output logic [6:0]  AhexL,
@@ -22,7 +21,7 @@ module Processor (input logic   Clk,     // Internal
 
 	 //local logic variables go here
 	 logic Reset_SH, LoadA_SH, LoadB_SH, Execute_SH;
-	 logic Ld_A, Ld_B, newA, newB, opA, opB, bitA, bitB, Shift_En,
+	 logic Ld_A, Ld_B, newA, newB, opA, opB, bitA, bitB, Shift_En, add, sub
 	 logic [3:0] A, B, Din_S;
 	 logic x;
 	 
@@ -30,7 +29,8 @@ module Processor (input logic   Clk,     // Internal
 	 //We can use the "assign" statement to do simple combinational logic
 	 assign Aval = A;
 	 assign Bval = B;
-	 assign LED = {Execute_SH,LoadA_SH,LoadB_SH,Reset_SH}; //Concatenate is a common operation in HDL
+	 
+//	 assign LED = {Execute_SH,LoadA_SH,LoadB_SH,Reset_SH}; //Concatenate is a common operation in HDL
 	 assign x = 1'b0
 	 
 	 //Note that you can hardwire F and R here with 'assign'. What to assign them to? Check the demo points!
@@ -51,24 +51,20 @@ module Processor (input logic   Clk,     // Internal
                         .B_out(opB),
                         .A(A),
                         .B(B) );
-    router           router (
-								.R(R_S),
-                        .A_In(bitA),
-                        .B_In(bitB),
-                        .A_Out(newA),
-                        .B_Out(newB),
-                        .F_A_B );
+								
 	 control          control_unit (
                         .Clk(Clk),
                         .Reset(Reset_SH),
-                        .LoadA(LoadA_SH),
+                        .LoadA(LoadA_SH), 
                         .LoadB(LoadB_SH),
                         .Execute(Execute_SH),
                         .Shift_En,
+								.add,
+								.sub,
                         .Ld_A,
                         .Ld_B );
-	 
-	 ripple_adder		adder (.A(Aval), .B(Din), .cin(1'b0),  .S(Aval), .cout(x))
+								
+	 multiplier       values (.shift(Shift_En), .add(add), .sub(sub), .A(newA), .S(Switches), .clk(Clk), .reset(Reset_SH), .Aout(A_val), .x(x), .m(m))
 	 
 	 HexDriver        HexAL (
                         .In0(A[3:0]),
