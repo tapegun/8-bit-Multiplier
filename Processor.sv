@@ -9,7 +9,6 @@ module Processor (input logic   Clk,     // Internal
                                 clearALoadB,  
                                 Execute,
 						input logic	[7:0]  Switches,
-                  input logic [7:0]  Din,     // input data
 				  //Hint for SignalTap, you want to comment out the following 2 lines to hardwire values for F and R
 //                  output logic [3:0]  LED,     // DEBUG
                   output logic [7:0]  Aval,    // DEBUG
@@ -75,7 +74,7 @@ module Processor (input logic   Clk,     // Internal
 								
 							//inputs: shift, add, sub, [7:0] A, [7:0] S, clearA_LoadB, clearA, clk, reset
 							//outputs: [7:0] Aout, x, m
-	 multiplier       values (.shift(Shift_En), .add(add), .sub(sub), .A(newA), .S(Switches), .clk(Clk), .reset(Reset_SH), .Aout(A_val), .x(x), .m(m))
+	 multiplier       values (.shift(Shift_En), .SUB_ADD(sub_add), .A(newA), .S(Switches), .clk(Clk), .reset(Reset_SH), .Aout(A_val), .x(x), .m(m))
 	 
 	 HexDriver        HexAL (
                         .In0(A[3:0]),

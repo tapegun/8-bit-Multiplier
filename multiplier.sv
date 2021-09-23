@@ -16,12 +16,8 @@ module multiplier(
 
 // implement choosing adder or subtr
 
-
 ripple_adder		adder (.A(A), .B(S), .cin(1'b0),  .S(Aout), .cout(x))
 ripple_adder		subtra (.A(A'), .B(S), .cin(1'b1),  .S(Aout), .cout(x))
-
-
-
 
 
 
