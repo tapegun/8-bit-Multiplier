@@ -10,12 +10,12 @@ module control (	input Clk, Reset, Run, M,
 		begin
 				if (Reset)
 					curr_state <= ClearA_LdB; 
-				else
-					curr_state <= next_state;
-		end
+//				else
+//					curr_state <= next_state;
+		
 		// Assign outputs based on ‘state’
-		always_comb
-		begin
+		
+		else begin
 		// Default to be self-looping 		
 				next_state = curr_state; 
 				
@@ -27,8 +27,9 @@ module control (	input Clk, Reset, Run, M,
 							next_state = ClearA_LdB;
 						else if (Run)
 							next_state = Precompute;
-						
+						end
 						ClearA_LdB:
+						begin
 							next_state = Hold;
 						end
 						Precompute:
@@ -166,6 +167,7 @@ module control (	input Clk, Reset, Run, M,
 						SUB_ADD = 0;
 							end
 				endcase
+				end
 		end
 		
 endmodule 
