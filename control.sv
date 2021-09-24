@@ -165,7 +165,7 @@ enum logic [4:0] {A, B, C, D, E, F, G, H, I, J, K, L, M2, N, O, P, Q, R, S, T}  
 				Cnt_EN = 1'b0;
 				Clr_XA = 1'b0;
 				SUB_ADD = 1'b0;
-				States = 8'b10000000;
+				States = 8'b00000000;
 				end
         endcase
     end
