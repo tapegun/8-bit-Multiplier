@@ -54,7 +54,7 @@ module Processor (input logic   Clk,     // Internal
                         .D(Switches),
                         .A(Aval),
                         .B(Bval),
-								.M(M));
+						.M(M));
 
 //
 //multiplier       values (.sub_add(1'b0),  .A(8'b00000010), .S(Switches),
