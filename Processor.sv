@@ -49,7 +49,7 @@ module Processor (input logic   Clk,     // Internal
                         .Ld_XA(LD_XA), //note these are inferred assignments, because of the existence a logic variable of the same name
                         .Ld_B(LD_B),
                         .Shift_En(Shift_EN),
-								.Adat(A),
+						.Adat(A),
 //								.D(8'b00000001),
                         .D(Switches),
                         .A(Aval),

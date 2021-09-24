@@ -1,6 +1,7 @@
 module register_unit (input  logic Clk, Reset, x, Ld_XA, Ld_B, 
                             Shift_En,
-                      input  logic [7:0]  D, Adat,
+                      input  logic [7:0]  D, 
+					  input  logic [7:0]  Adat,
                       output logic [7:0]  A,
                       output logic [7:0]  B,
 							 output logic M);
