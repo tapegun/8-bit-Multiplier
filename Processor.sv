@@ -12,7 +12,8 @@ module Processor (input logic   Clk,     // Internal
 				  //Hint for SignalTap, you want to comment out the following 2 lines to hardwire values for F and R
 //                  output logic [3:0]  LED,     // DEBUG
                   output logic [7:0]  Aval,    // DEBUG
-                                Bval,    // DEBUG
+                                Bval,
+											States,// DEBUG
                   output logic [6:0]  AhexL,
                                 AhexU,
                                 BhexL,
@@ -31,8 +32,8 @@ module Processor (input logic   Clk,     // Internal
 	//outputs: [2:0] Dout
 	counter8 counter (.reset(0), .CLK(Clk), .cntEn(cntEn), .Dout(curr_count));					//outputs
 	
-	 control          control_unit (.Clk(Clk), .Reset(ClearALoadB), .Run(Execute), .M(M), .count(curr_count),
-						.LD_XA(LD_XA), .LD_B(LD_B), .Shift_EN(Shift_EN), .Cnt_EN(Cnt_EN), .Clr_XA(Clr_XA), .SUB_ADD(SUB_ADD));
+	 control          control_unit (.Clk(Clk), .Reset(ClearALoadB), .Run(Execute), .M, .count(curr_count),
+						.LD_XA, .LD_B, .Shift_EN, .Cnt_EN, .Clr_XA, .SUB_ADD, .States);
 								
 								
 							//inputs: shift, add, sub, [7:0] A, [7:0] S, clearA_LoadB, clearA, clk, reset

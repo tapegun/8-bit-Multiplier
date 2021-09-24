@@ -1,173 +1,174 @@
 module control (	input Clk, Reset, Run, M,
 						input [2:0] count,
-						output logic LD_XA, LD_B, Shift_EN, Cnt_EN, Clr_XA, SUB_ADD
+						output logic LD_XA, LD_B, Shift_EN, Cnt_EN, Clr_XA, SUB_ADD,
+						output logic [7:0] States
 						);
 						
-		enum logic [3:0] {Hold, ClearA_LdB, Precompute, FirstAdd, FirstShift,
-		Add, Shift, Sub} curr_state, next_state; // States
-		// Assign 'next_state' based on 'state' and 'Execute'
-		always_ff @ (posedge Clk) 
-		begin
-				if (Reset)
-					curr_state <= ClearA_LdB; 
-//				else
-//					curr_state <= next_state;
-		
-		// Assign outputs based on ‘state’
-		
-		else begin
-		// Default to be self-looping 		
-				next_state = curr_state; 
-				
-				unique case (curr_state)
-				
-						Hold:
-						begin
-						if (Reset)
-							next_state = ClearA_LdB;
-						else if (Run)
-							next_state = Precompute;
-						end
-						ClearA_LdB:
-						begin
-							next_state = Hold;
-						end
-						Precompute:
-						begin
-							if (M)
-								next_state = FirstAdd;
-							else
-								next_state = FirstShift;
-						end
-						FirstAdd:
-						begin
-							next_state = FirstShift;
-						end
-						FirstShift:
-						begin
-							if (M)
-								next_state = Add;
-							else
-								next_state = Shift;
-						end
-						Add:
-						begin
-							next_state = Shift;
-						end
-						Shift:
-						begin
-							if (M & count[2] & count[1] & count[0])
-								next_state = Sub;
-							else if (~count[2] & ~count[1] & ~count[0])
-								next_state = Hold;
-							else if (M)
-								next_state = Add;
-							else if (~M)
-								next_state = Shift;
-						end
-						Sub:
-						begin
-							next_state = Shift;
-						end
-				endcase
+enum logic [4:0] {A, B, C, D, E, F, G, H, I, J, K, L, M2, N, O, P, Q, R, S, T}  curr_state, next_state; //4 more states for 4 more counts
 
-		// Assign outputs based on ‘state’
+	//updates flip flop, current state is the only one
+    always_ff @ (posedge Clk)  
+    begin
+        if (Reset)
+            curr_state <= A;
+        else 
+            curr_state <= next_state;
+    end
 
-				case (curr_state)
-						
-						Hold:
-						begin
-						LD_XA = 0;
-						LD_B = 0;
-						Shift_EN = 0;
-						Cnt_EN = 0;
-						Clr_XA = 0;
-						SUB_ADD = 0;
-						
-						end
-						
-						ClearA_LdB:
-						begin
-						LD_XA = 0;
-						LD_B = 1;
-						Shift_EN = 0;
-						Cnt_EN = 0;
-						Clr_XA = 1;
-						SUB_ADD = 0;
-						end
-						
-						Precompute:
-						begin
-						LD_XA = 0;
-						LD_B = 0;
-						Shift_EN = 0;
-						Cnt_EN = 0;
-						Clr_XA = 1;
-						SUB_ADD = 0;
-						end
-						
-						FirstAdd:
-						begin
-						LD_XA = 1;
-						LD_B = 0;
-						Shift_EN = 0;
-						Cnt_EN = 0;
-						Clr_XA = 0;
-						SUB_ADD = 0;
-						end
-						
-						FirstShift:
-						begin
-						LD_XA = 0;
-						LD_B = 0;
-						Shift_EN = 1;
-						Cnt_EN = 1;
-						Clr_XA = 0;
-						SUB_ADD = 0;
-						end
-						
-						Add:
-						begin
-						LD_XA = 1;
-						LD_B = 0;
-						Shift_EN = 0;
-						Cnt_EN = 0;
-						Clr_XA = 0;
-						SUB_ADD = 0;
-						end
-						
-						Shift:
-						begin
-						LD_XA = 0;
-						LD_B = 0;
-						Shift_EN = 1;
-						Cnt_EN = 1;
-						Clr_XA = 0;
-						SUB_ADD = 0;
-						end
-						
-						Sub:
-						begin
-						LD_XA = 1;
-						LD_B = 0;
-						Shift_EN = 0;
-						Cnt_EN = 0;
-						Clr_XA = 0;
-						SUB_ADD = 1;
-						end
-						
-						
-						default:
-							begin
-							LD_XA = 0;
-						LD_B = 0;
-						Shift_EN = 0;
-						Cnt_EN = 0;
-						Clr_XA = 0;
-						SUB_ADD = 0;
-							end
-				endcase
+    // Assign outputs based on state
+	always_comb
+    begin
+        
+		  next_state  = curr_state;	//required because I haven't enumerated all possibilities below
+        unique case (curr_state) 
+
+            A :
+				begin
+				if (Run)
+                       next_state = B;
 				end
-		end
-		
+            B :    next_state = C;
+            C :    next_state = D;
+            D :    next_state = E;
+            E :    next_state = F;
+				F :    next_state = G;
+				G :    next_state = H;
+				H :    next_state = I;
+				I :    
+				begin
+				next_state = I;
+				end
+//            J :    
+//				K	:
+//				L	:
+//				M2	:
+//				N	:
+//				O	:
+//				P	:
+//				Q	:
+//				R	:
+//				S	:
+//				T	:
+							  
+        endcase
+   
+		  // Assign outputs based on ‘state’
+        case (curr_state) 
+	   	   A: 
+				begin
+				LD_XA = 1'b0;
+				LD_B = 1'b0;
+				Shift_EN = 1'b0;
+				Cnt_EN = 1'b0;
+				Clr_XA = 1'b0;
+				SUB_ADD = 1'b0;
+				States = 8'b00000001;
+						
+	         
+		      end
+				B:
+				begin
+				LD_XA = 1'b0;
+				LD_B = 1'b0;
+				Shift_EN = 1'b0;
+				Cnt_EN = 1'b0;
+				Clr_XA = 1'b0;
+				SUB_ADD = 1'b0;
+				States = 8'b01111110;
+				end
+				C:
+				begin
+				LD_XA = 1'b0;
+				LD_B = 1'b0;
+				Shift_EN = 1'b0;
+				Cnt_EN = 1'b0;
+				Clr_XA = 1'b0;
+				SUB_ADD = 1'b0;
+				States = 8'b01111110;
+				end
+				D:
+				begin
+				LD_XA = 1'b0;
+				LD_B = 1'b0;
+				Shift_EN = 1'b0;
+				Cnt_EN = 1'b0;
+				Clr_XA = 1'b0;
+				SUB_ADD = 1'b0;
+				States = 8'b01111110;
+				end
+				E:
+				begin
+				LD_XA = 1'b0;
+				LD_B = 1'b0;
+				Shift_EN = 1'b0;
+				Cnt_EN = 1'b0;
+				Clr_XA = 1'b0;
+				SUB_ADD = 1'b0;
+				States = 8'b01111110;
+				end
+				F:
+				begin
+				LD_XA = 1'b0;
+				LD_B = 1'b0;
+				Shift_EN = 1'b0;
+				Cnt_EN = 1'b0;
+				Clr_XA = 1'b0;
+				SUB_ADD = 1'b0;
+				States = 8'b01111110;
+				end
+				G:
+				begin
+				LD_XA = 1'b0;
+				LD_B = 1'b0;
+				Shift_EN = 1'b0;
+				Cnt_EN = 1'b0;
+				Clr_XA = 1'b0;
+				SUB_ADD = 1'b0;
+				States = 8'b01111110;
+				end
+				H:
+				begin
+				LD_XA = 1'b0;
+				LD_B = 1'b0;
+				Shift_EN = 1'b0;
+				Cnt_EN = 1'b0;
+				Clr_XA = 1'b0;
+				SUB_ADD = 1'b0;
+				States = 8'b01111110;
+				end
+				I:
+				begin
+				LD_XA = 1'b0;
+				LD_B = 1'b0;
+				Shift_EN = 1'b0;
+				Cnt_EN = 1'b0;
+				Clr_XA = 1'b0;
+				SUB_ADD = 1'b0;
+				States = 8'b10000000;
+				end
+				//J :    
+//				K	:
+//				L	:
+//				M2	:
+//				N	:
+//				O	:
+//				P	:
+//				Q	:
+//				R	:
+//				S	:
+//				T	:
+				default:
+				begin
+				LD_XA = 1'b0;
+				LD_B = 1'b0;
+				Shift_EN = 1'b0;
+				Cnt_EN = 1'b0;
+				Clr_XA = 1'b0;
+				SUB_ADD = 1'b0;
+				States = 8'b10000000;
+				end
+        endcase
+    end
+
+						
 endmodule 
