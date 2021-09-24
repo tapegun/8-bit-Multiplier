@@ -48,12 +48,8 @@ module Processor (input logic   Clk,     // Internal
                         .Ld_B,
                         .Shift_En,
                         .D(Switches),
-                        .A_In(newA),
-                        .B_In(newB),
-                        .A_out(opA),
-                        .B_out(opB),
-                        .A(A),
-                        .B(B) );
+                        .A(Aval),
+                        .B(Bval) );
 					
 	//inputs: reset, CLK, cntEn
 	//outputs: [2:0] Dout
@@ -75,7 +71,7 @@ module Processor (input logic   Clk,     // Internal
 								
 							//inputs: shift, add, sub, [7:0] A, [7:0] S, clearA_LoadB, clearA, clk, reset
 							//outputs: [7:0] Aout, x, m
-	 multiplier       values (.shift(Shift_En), .sub_add(sub_add),  .A(newA), .S(Switches), .clk(Clk), .Aout(A_val), .x(x))
+	 multiplier       values (.shift(Shift_En), .sub_add(sub_add),  .A(A), .S(Switches), .clk(Clk), .Aout(A_val), .x(x))
 	 
 	 HexDriver        HexAL (
                         .In0(A[3:0]),
