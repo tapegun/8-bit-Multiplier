@@ -4,14 +4,10 @@ module multiplier(
 	input logic [7:0] A,
 	input logic [7:0] S,
 	input logic clk,
-	input logic Ld_XA,
-	input logic Ld_B,
-	input logic Clr_XA,
 	input logic reset,
 	
 	output logic [7:0] Aout,
 	output logic x,
-	output logic m
 );
 
 	// implement choosing adder or subtr

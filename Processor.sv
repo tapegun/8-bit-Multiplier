@@ -43,10 +43,11 @@ module Processor (input logic   Clk,     // Internal
 	 register_unit    reg_unit (
                         .Clk(Clk),
                         .Reset(Reset_SH),
+								.x,
                         .Ld_XA, //note these are inferred assignments, because of the existence a logic variable of the same name
                         .Ld_B,
                         .Shift_En,
-                        .D(Din_S),
+                        .D(Switches),
                         .A_In(newA),
                         .B_In(newB),
                         .A_out(opA),
@@ -74,7 +75,7 @@ module Processor (input logic   Clk,     // Internal
 								
 							//inputs: shift, add, sub, [7:0] A, [7:0] S, clearA_LoadB, clearA, clk, reset
 							//outputs: [7:0] Aout, x, m
-	 multiplier       values (.shift(Shift_En), .sub_add(sub_add), .Ld_XA(), .Ld_B(), , .Clr_XA(),  .A(newA), .S(Switches), .clk(Clk), .reset(Reset_SH), .Aout(A_val), .x(x), .m(m))
+	 multiplier       values (.shift(Shift_En), .sub_add(sub_add),  .A(newA), .S(Switches), .clk(Clk), .Aout(A_val), .x(x))
 	 
 	 HexDriver        HexAL (
                         .In0(A[3:0]),
