@@ -14,6 +14,8 @@ module register_unit (input  logic Clk, Reset, x, Ld_XA, Ld_B,
 		.Shift_Out(tmp_A_to_B), .Data_Out(A));
 		
     reg_8  reg_B (.*, .Reset(0), .Shift_In(tmp_A_to_B), .Load(Ld_B), .Shift_Out(), .Data_Out(B));
+	 
+//	 reg1   reg_X (.Clk(Clk), .Load(Ld_XA), .Reset(Reset), .D(x), .Q(x_));
 						
 	  always_ff @ (posedge Clk)
 		 begin
