@@ -14,97 +14,21 @@ module multiplier(
 	output logic m
 );
 
-// implement choosing adder or subtr
+	// implement choosing adder or subtr
+	logic x_tmp_add;
+	logic x_tmp_sub;
+	logic [7:0] A_tmp_add;
+	logic [7:0] A_tmp_sub;
 
-ripple_adder		adder (.A(A), .B(S), .cin(1'b0),  .S(Aout), .cout(x))
-ripple_adder		subtra (.A(A'), .B(S), .cin(1'b1),  .S(Aout), .cout(x))
+	ripple_adder		adder (.A(A), .B(S), .cin(1'b0),  .S(A_tmp_add), .cout(), .x(x_tmp_add)
+	ripple_adder		subtra (.A(A'), .B(S), .cin(1'b1),  .S(A_tmp_sub), .cout(), .x(x_tmp_sub)
 
-always_ff @ (posedge clk)
-	begin
-		
-		if(reset) begin
-			Areset <= 1'b1;
-			Breset <= 1'b1;
-			Aloaden <= 1'b0;
-			Bloaden <= 1'b0;
-			Ashiften <= 1'b0;
-			Bshiften <= 1'b0;
-			
-			x <= 1'b0;
-		end
-		
-		else if (clearA) begin
-			Areset <= 1'b0;
-			Breset <= 1'b0;
-			Aloaden <= 1'b1;
-			Bloaden <= 1'b0;
-			Ashiften <= 1'b0;
-			Bshiften <= 1'b0;
-			
-			ALoadData <= 8'h00;
-			
-			x <= 1'b0;
-
-		end
-		
-		else if (clearA_LoadB) begin
-			Areset <= 1'b1;
-			
-			Breset <= 1'b0;
-			Bshiften <= 1'b0;
-			Bloaden <= 1'b1;
-			BLoadData <= S;
-			
-			x = S[7];
-			
-		end
-		
-		else if (shift) begin
-			Areset <= 1'b0;
-			Breset <= 1'b0;
-			
-			Ashiften <= 1'b1;
-			Bshiften <= 1'b1;
-			
-			Aloaden <= 1'b0;
-			Bloaden <= 1'b0;
-			
-		end
-		
-		else if (add) begin
-			Areset <= 1'b0;
-			Breset <= 1'b0;
-			Ashiften <= 1'b0;
-			Bshiften <= 1'b0;
-
-			Aloaden <= 1'b1;
-			Bloaden <= 1'b0;
-			
-			ALoadData = AplusS;
-			x = S[7];
-		end
-		
-		else if (sub) begin
-			Areset <= 1'b0;
-			Breset <= 1'b0;
-			Ashiften <= 1'b0;
-			Bshiften <= 1'b0;
-
-			Aloaden <= 1'b1;
-			Bloaden <= 1'b0;
-
-			ALoadData = AminusS;
-			x = ~S[7];
-		end
-		
-		else begin
-			Areset <= 1'b0;
-			Breset <= 1'b0;
-			Ashiften <= 1'b0;
-			Bshiften <= 1'b0;
-			Aloaden <= 1'b0;
-			Bloaden <= 1'b0;
-		end
-		
+	always_comb
+		if(sub_add):
+			Aout = A_tmp_add;
+			x = 1'b0;
+		if(!sub_add):
+			Aout = A_tmp_sub;
+			x = x_temp_sub;
 	end
-
+endmodule
