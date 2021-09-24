@@ -1,6 +1,6 @@
 module control (	input Clk, Reset, Run, M,
 						input [2:0] count,
-						output logic shift_en, Ld_A, //same as adding 
+						output logic shift_en, Ld_XA, //same as adding 
 						output logic Ld_x, ClearAX_LoadB, Sub, CntEn
 						);
 						

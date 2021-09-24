@@ -20,7 +20,7 @@ module Processor (input logic   Clk,     // Internal
 
 	 //local logic variables go here
 	 logic Reset_SH, LoadA_SH, LoadB_SH, Execute_SH;
-	 logic Ld_A, Ld_B, newA, newB, opA, opB, bitA, bitB, Shift_En, add, sub
+	 logic Ld_XA, Ld_B, newA, newB, opA, opB, bitA, bitB, Shift_En, add, sub
 	 logic [3:0] A, B, Din_S;
 	 logic x;
 	 //logic for counter
@@ -43,7 +43,7 @@ module Processor (input logic   Clk,     // Internal
 	 register_unit    reg_unit (
                         .Clk(Clk),
                         .Reset(Reset_SH),
-                        .Ld_A, //note these are inferred assignments, because of the existence a logic variable of the same name
+                        .Ld_XA, //note these are inferred assignments, because of the existence a logic variable of the same name
                         .Ld_B,
                         .Shift_En,
                         .D(Din_S),
@@ -68,13 +68,13 @@ module Processor (input logic   Clk,     // Internal
                         .Shift_En,
 								.add,
 								.sub,
-                        .Ld_A,
+                        .Ld_XA,
                         .Ld_B );
 								
 								
 							//inputs: shift, add, sub, [7:0] A, [7:0] S, clearA_LoadB, clearA, clk, reset
 							//outputs: [7:0] Aout, x, m
-	 multiplier       values (.shift(Shift_En), .SUB_ADD(sub_add), .A(newA), .S(Switches), .clk(Clk), .reset(Reset_SH), .Aout(A_val), .x(x), .m(m))
+	 multiplier       values (.shift(Shift_En), .sub_add(sub_add), .Ld_XA(), .Ld_B(), , .Clr_XA(),  .A(newA), .S(Switches), .clk(Clk), .reset(Reset_SH), .Aout(A_val), .x(x), .m(m))
 	 
 	 HexDriver        HexAL (
                         .In0(A[3:0]),
