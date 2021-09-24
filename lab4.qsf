@@ -58,3 +58,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE ripple_adder.sv
 set_global_assignment -name SYSTEMVERILOG_FILE reg_17.sv
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name SYSTEMVERILOG_FILE Processor.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Synchronizers.sv
+set_global_assignment -name SYSTEMVERILOG_FILE multiplier.sv
