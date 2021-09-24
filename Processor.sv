@@ -19,12 +19,10 @@ module Processor (input logic   Clk,     // Internal
                                 BhexU);
 
 	 //local logic variables go here
-	 logic [3:0] A, B, Din_S; //dont know
 	 
 	 logic LD_XA, LD_B, Shift_EN, Cnt_EN, Clr_XA, SUB_ADD; //outputs of control unit
 	 logic [2:0] curr_count; //output of counter
 	 logic x, M;
-	 logic newA, newB, opA, opB;
 
 					
 	//inputs: reset, CLK, cntEn
@@ -38,13 +36,13 @@ module Processor (input logic   Clk,     // Internal
 								
 							//inputs: shift, add, sub, [7:0] A, [7:0] S, clearA_LoadB, clearA, clk, reset
 							//outputs: [7:0] Aout, x, m
-	 multiplier       values (.shift(Shift_En), .sub_add(SUB_ADD),  .A(newA), .S(Switches), .clk(Clk),
+	 multiplier       values (.shift(Shift_En), .sub_add(SUB_ADD),  .A(Aval), .S(Switches), .clk(Clk),
 										.Aout(A_val), .x(x));
 										
 	register_unit    reg_unit (
                         .Clk(Clk),
                         .Reset(Clr_XA),
-                                .x,
+                        .x,
                         .Ld_XA, //note these are inferred assignments, because of the existence a logic variable of the same name
                         .Ld_B,
                         .Shift_En,
@@ -53,27 +51,25 @@ module Processor (input logic   Clk,     // Internal
                         .B(Bval) );
 	 
 	 HexDriver        HexAL (
-                        .In0(A[3:0]),
+                        .In0(Aval[3:0]),
                         .Out0(AhexL) );
 	 HexDriver        HexBL (
-                        .In0(B[3:0]),
+                        .In0(Bval[3:0]),
                         .Out0(BhexL) );
 								
 	 //When you extend to 8-bits, you will need more HEX drivers to view upper nibble of registers, for now set to 0
 	 HexDriver        HexAU (
-                        .In0(4'h0),
+                        .In0(Aval[7:4]),
                         .Out0(AhexU) );	
 	 HexDriver        HexBU (
-                       .In0(4'h0),
+                       .In0(Bval[7:4]),
                         .Out0(BhexU) );
 								
 	  //Input synchronizers required for asynchronous inputs (in this case, from the switches)
 	  //These are array module instantiations
 	  //Note: S stands for SYNCHRONIZED, H stands for active HIGH
 	  //Note: We can invert the levels inside the port assignments
-	  sync button_sync[3:0] (Clk, {~Reset, LoadA, LoadB, ~Execute}, {Reset_SH, LoadA_SH, LoadB_SH, Execute_SH});
-	  sync Din_sync[3:0] (Clk, Din, Din_S);
-	  sync F_sync[2:0] (Clk, F, F_S);
-	  sync R_sync[1:0] (Clk, R, R_S);
+	  //sync button_sync[3:0] (Clk, {~Reset, LoadA, LoadB, ~Execute}, {Reset_SH, LoadA_SH, LoadB_SH, Execute_SH});
+	  sync Din_sync[7:0] (Clk, Switches);
 	  
 endmodule

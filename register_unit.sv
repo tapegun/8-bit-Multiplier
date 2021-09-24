@@ -9,7 +9,7 @@ module register_unit (input  logic Clk, Reset, x, Ld_XA, Ld_B,
 	 logic tmp_A_to_B;
 	 assign M = B[0];
 	
-    reg_8  reg_A (.*, 				.Shift_In(x_), 		  .Load(Ld_XA), .Shift_Out(tmp_A_to_B), .Data_Out(A));
+    reg_8  reg_A (.*, 			 .Shift_In(x_), 		.Load(Ld_XA), .Shift_Out(tmp_A_to_B), .Data_Out(A));
     reg_8  reg_B (.*, .Reset(0), .Shift_In(tmp_A_to_B), .Load(Ld_B),  .Data_Out(B));
 						
 	  always_ff @ (posedge Clk)
