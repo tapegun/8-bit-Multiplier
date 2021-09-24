@@ -24,11 +24,13 @@ module multiplier(
 	ripple_adder		subtra (.A(A'), .B(S), .cin(1'b1),  .S(A_tmp_sub), .cout(), .x(x_tmp_sub)
 
 	always_comb
-		if(sub_add):
+		if(sub_add) begin
 			Aout = A_tmp_add;
 			x = 1'b0;
-		if(!sub_add):
+		end
+		if(!sub_add) begin
 			Aout = A_tmp_sub;
 			x = x_temp_sub;
+		end
 	end
 endmodule
