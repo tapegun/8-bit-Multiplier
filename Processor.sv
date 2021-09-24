@@ -24,6 +24,9 @@ module Processor (input logic   Clk,     // Internal
 	 logic Ld_A, Ld_B, newA, newB, opA, opB, bitA, bitB, Shift_En, add, sub
 	 logic [3:0] A, B, Din_S;
 	 logic x;
+	 //logic for counter
+	 logic cntEn;
+	 logic [2:0] curr_count;
 	 
 	 
 	 //We can use the "assign" statement to do simple combinational logic
@@ -51,6 +54,11 @@ module Processor (input logic   Clk,     // Internal
                         .B_out(opB),
                         .A(A),
                         .B(B) );
+					
+	//inputs: reset, CLK, cntEn
+	//outputs: [2:0] Dout
+	counter8 counter (.reset(), CLK(Clk), .cntEn(cntEn) //inputs
+							, .Dout(curr_count));					//outputs
 								
 	 control          control_unit (
                         .Clk(Clk),
@@ -64,6 +72,9 @@ module Processor (input logic   Clk,     // Internal
                         .Ld_A,
                         .Ld_B );
 								
+								
+							//inputs: shift, add, sub, [7:0] A, [7:0] S, clearA_LoadB, clearA, clk, reset
+							//outputs: [7:0] Aout, x, m
 	 multiplier       values (.shift(Shift_En), .add(add), .sub(sub), .A(newA), .S(Switches), .clk(Clk), .reset(Reset_SH), .Aout(A_val), .x(x), .m(m))
 	 
 	 HexDriver        HexAL (

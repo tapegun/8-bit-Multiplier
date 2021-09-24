@@ -1,7 +1,7 @@
-module control (	input Clk, Reset, Run, M, 
+module control (	input Clk, Reset, Run, M,
 						input [2:0] count,
 						output logic shift_en, Ld_A, //same as adding 
-						output logic Ld_x, ClearAX_LoadB, Sub
+						output logic Ld_x, ClearAX_LoadB, Sub, CntEn
 						);
 						
 		enum logic [3:0] {ResetState, Add, Shift, SubState,Hold} curr_state, next_state; // States
@@ -9,9 +9,9 @@ module control (	input Clk, Reset, Run, M,
 		always_ff @ (posedge Clk) 
 		begin
 				if (Reset)
-					curr_state = A; 
+					curr_state <= ResetState; 
 				else
-					curr_state = next_state;
+					curr_state <= next_state;
 		end
 		// Assign outputs based on ‘state’
 		always_comb
@@ -54,6 +54,7 @@ module control (	input Clk, Reset, Run, M,
 								ClearAX_LoadB = 1'b0;
 								Shift_En = 1'b0;
 								Sub = 1'b0;
+								CntEn = 1'b0;
 							end
 						Add:
 							begin
@@ -61,6 +62,7 @@ module control (	input Clk, Reset, Run, M,
 								ClearAX_LoadB = 1'b0;
 								Shift_En = 1'b0;
 								Sub = 1'b0;
+								CntEn = 1'b0;
 							end
 						Shift:
 							begin
@@ -68,6 +70,7 @@ module control (	input Clk, Reset, Run, M,
 								ClearAX_LoadB = 1'b0;
 								Shift_En = 1'b1;
 								Sub = 1'b0;
+								CntEn = 1'b1;
 							end
 						SubState:
 							begin
@@ -75,6 +78,7 @@ module control (	input Clk, Reset, Run, M,
 								ClearAX_LoadB = 1'b0;
 								Shift_En = 1'b0;
 								Sub = 1'b1;
+								CntEn = 1'b0;
 							end
 						Hold:
 							begin
@@ -82,6 +86,7 @@ module control (	input Clk, Reset, Run, M,
 								ClearAX_LoadB = 1'b1;
 								Shift_En = 1'b0;
 								Sub = 1'b0;
+								CntEn = 1'b0;
 							end
 						default:
 							begin
